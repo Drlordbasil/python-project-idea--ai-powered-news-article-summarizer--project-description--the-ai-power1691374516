@@ -1,0 +1,14 @@
+The package requirements for this Python program are:
+
+- requests
+- BeautifulSoup
+- transformers
+- textattack/bert-base-uncased-imdb
+
+You can install these packages using pip:
+
+```
+pip install requests beautifulsoup4 transformers textattack/bert-base-uncased-imdb
+```
+
+Make sure to install them in your Python environment before running the program.
