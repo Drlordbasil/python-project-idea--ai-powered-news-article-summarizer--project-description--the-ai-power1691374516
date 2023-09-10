@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from transformers import pipeline
 
+
 class NewsArticleSummarizer:
     def __init__(self):
         self.nlp = pipeline("summarization")
@@ -35,7 +36,8 @@ class NewsArticleSummarizer:
         """
         Generates a summary of the article using NLP techniques.
         """
-        summary = self.nlp(article["content"], max_length=100, min_length=30, do_sample=False)[0]["summary_text"]
+        summary = self.nlp(article["content"], max_length=100,
+                           min_length=30, do_sample=False)[0]["summary_text"]
 
         return summary
 
@@ -54,7 +56,8 @@ class NewsArticleSummarizer:
         """
         Determines the sentiment expressed in the article using sentiment analysis.
         """
-        sentiment = self.nlp(article["content"], model=self.sentiment_analysis_model)[0]["label"]
+        sentiment = self.nlp(article["content"], model=self.sentiment_analysis_model)[
+            0]["label"]
 
         return sentiment
 
