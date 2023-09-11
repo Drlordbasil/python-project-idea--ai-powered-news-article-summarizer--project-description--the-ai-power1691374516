@@ -1,6 +1,7 @@
-import requests
-from bs4 import BeautifulSoup
 from transformers import pipeline
+from bs4 import BeautifulSoup
+import requests
+Optimized Python script:
 
 
 class NewsArticleSummarizer:
@@ -16,19 +17,15 @@ class NewsArticleSummarizer:
         soup = BeautifulSoup(response.content, "html.parser")
         articles = soup.find_all("article")
 
-        news_articles = []
-        for article in articles:
-            title = article.find("h2").text.strip()
-            author = article.find("span", class_="author").text.strip()
-            date = article.find("time")["datetime"]
-            content = article.find("div", class_="content").text.strip()
-
-            news_articles.append({
-                "title": title,
-                "author": author,
-                "date": date,
-                "content": content
-            })
+        news_articles = [
+            {
+                "title": article.find("h2").text.strip(),
+                "author": article.find("span", class_="author").text.strip(),
+                "date": article.find("time")["datetime"],
+                "content": article.find("div", class_="content").text.strip()
+            }
+            for article in articles
+        ]
 
         return news_articles
 
@@ -36,8 +33,8 @@ class NewsArticleSummarizer:
         """
         Generates a summary of the article using NLP techniques.
         """
-        summary = self.nlp(article["content"], max_length=100,
-                           min_length=30, do_sample=False)[0]["summary_text"]
+        summary = self.nlp(article["content"], max_length=100, min_length=30, do_sample=False)[0][
+            "summary_text"]
 
         return summary
 
@@ -45,10 +42,9 @@ class NewsArticleSummarizer:
         """
         Filters articles based on user's preferred topics.
         """
-        filtered_articles = []
-        for article in articles:
-            if topic.lower() in article["content"].lower():
-                filtered_articles.append(article)
+        filtered_articles = [
+            article for article in articles if topic.lower() in article["content"].lower()
+        ]
 
         return filtered_articles
 
@@ -56,8 +52,8 @@ class NewsArticleSummarizer:
         """
         Determines the sentiment expressed in the article using sentiment analysis.
         """
-        sentiment = self.nlp(article["content"], model=self.sentiment_analysis_model)[
-            0]["label"]
+        sentiment = self.nlp(article["content"], model=self.sentiment_analysis_model)[0][
+            "label"]
 
         return sentiment
 
@@ -71,21 +67,18 @@ class NewsArticleSummarizer:
             articles = self.filter_by_topic(articles, topic)
 
         if sentiment:
-            filtered_articles = []
-            for article in articles:
-                article_sentiment = self.analyze_sentiment(article)
-                if article_sentiment == sentiment:
-                    filtered_articles.append(article)
-
+            filtered_articles = [
+                article for article in articles if self.analyze_sentiment(article) == sentiment
+            ]
             articles = filtered_articles
 
-        summaries = []
-        for article in articles:
-            summary = self.summarize_article(article)
-            summaries.append({
+        summaries = [
+            {
                 "title": article["title"],
-                "summary": summary
-            })
+                "summary": self.summarize_article(article)
+            }
+            for article in articles
+        ]
 
         return summaries
 
